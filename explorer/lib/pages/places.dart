@@ -13,15 +13,27 @@ class Places extends StatefulWidget {
 class _HomeState extends State<Places> {
   HereMaps heremaps;
   List<dynamic> places = [];
+  List<dynamic> category = [];
   Future<void> famousplaces(LatLng argument) async {
     try {
       await heremaps
           .explorePopularPlaces(lat: argument.latitude, lon: argument.longitude)
           .then((value) {
-        print(value);
         setState(() {
           places.addAll(value['results']['items']);
         });
+        for (int i = 0; i < places.length; i++) {
+          if (places[i]['category']['id'] != null &&
+              places[i]['category']['id'] != 'restaurant' &&
+              !(category.contains(places[i]['category']['id']))) {
+            category.add(places[i]['category']['id']);
+          }
+          if (places[i]['category']['id'] == null ||
+              places[i]['category']['id'] == 'restaurant') {
+            places.remove(places[i]);
+          }
+        }
+        print(category);
         print(places);
       });
     } catch (e) {
@@ -35,7 +47,9 @@ class _HomeState extends State<Places> {
   @override
   void initState() {
     coordinates = widget.coordinates;
-    heremaps = HereMaps(apiKey: "iFyx2NnmFuUfuw1X2Y6G690e9GhsbZ9SzrZyGSyo38A");//create a new apikey
+    heremaps = HereMaps(
+        apiKey:
+            "eb1nV17vXjOOaOd9HZsWFlde5SET0ncga8O-cg-AazI"); //create a new apikey
     famousplaces(widget.coordinates);
     super.initState();
   }
