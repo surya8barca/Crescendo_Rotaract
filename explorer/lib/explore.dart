@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Explore extends StatefulWidget {
@@ -12,9 +13,10 @@ class Explore extends StatefulWidget {
 }
 
 class _HomeState extends State<Explore> {
+  GooglePlace gplace;
   static final CameraPosition initialLocation = CameraPosition(
     target: LatLng(20.5937, 78.9629),
-    zoom: 5,
+    zoom: 4,
   );
 
   GoogleMapController _controller;
@@ -25,9 +27,36 @@ class _HomeState extends State<Explore> {
           Coordinates(argument.latitude, argument.longitude));
       return address.first.addressLine;
     } catch (e) {
-      print(e.message);
+      print(e.message.toString());
       return "Error";
     }
+  }
+
+  Future<String> getplaceId(LatLng coordinates) async {
+    try {
+      var result = await gplace.search.getNearBySearch(
+          Location(lat: coordinates.latitude, lng: coordinates.longitude),
+          1500);
+      print(result.status);
+      return "hey";
+    } catch (e) {
+      print(e.toString());
+      return "Error";
+    }
+  }
+
+  /*Future<void> getdetails(String address) async {
+    try {
+      var result = await gplace.details.get(placeId)
+    } catch (e) {
+      print(e.message);
+    }
+  }*/
+
+  @override
+  void initState() {
+    gplace = GooglePlace("AIzaSyA-Uz5RbrcKJz1c31VAIRc-fdIOvDUk3pA");
+    super.initState();
   }
 
   @override
@@ -46,66 +75,106 @@ class _HomeState extends State<Explore> {
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height / 72),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: GoogleMap(
-                onLongPress: (argument) async {
-                  final address = await getaddress(argument);
-                  Alert(context: context,
-                  title: address,
-                  buttons: [],
-                  style: AlertStyle(isCloseButton: false),
-                  content: ButtonTheme(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(
-                                MediaQuery.of(context).size.width / 10.666)),
-                        minWidth: MediaQuery.of(context).size.width / 2.1333,
-                        height: MediaQuery.of(context).size.height / 8,
-                        buttonColor: Colors.cyan,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlaceHome(
-                          address: address,
-                        ),
-                      ));
-                          },
-                          child: Text(
-                            'View Place',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.height / 21.333,
-                            ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Long press the place you want to explore',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height / 25,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        width: MediaQuery.of(context).size.width / 128,
+                        color: Colors.black),
+                  ),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: GoogleMap(
+                      onLongPress: (argument) async {
+                        final address = await getaddress(argument);
+                        final placeId = await getplaceId(argument);
+                        print(placeId);
+                        Alert(
+                          context: context,
+                          title: address,
+                          buttons: [],
+                          style: AlertStyle(isCloseButton: false),
+                          content: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ButtonTheme(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: new BorderRadius.circular(
+                                        MediaQuery.of(context).size.width /
+                                            10.666)),
+                                minWidth:
+                                    MediaQuery.of(context).size.width / 2.1333,
+                                height: MediaQuery.of(context).size.height / 8,
+                                buttonColor: Colors.cyan,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PlaceHome(
+                                            address: address,
+                                          ),
+                                        ));
+                                  },
+                                  child: Text(
+                                    'View Place',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize:
+                                          MediaQuery.of(context).size.height /
+                                              21.333,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                  ).show();
-                },
-                myLocationEnabled: true,
-                zoomControlsEnabled: true,
-                minMaxZoomPreference: MinMaxZoomPreference(3, 8),
-                mapType: MapType.normal,
-                initialCameraPosition: initialLocation,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
-                compassEnabled: true,
-                gestureRecognizers: Set()
-                  ..add(Factory<PanGestureRecognizer>(
-                      () => PanGestureRecognizer()))
-                  ..add(Factory<ScaleGestureRecognizer>(
-                      () => ScaleGestureRecognizer()))
-                  ..add(Factory<VerticalDragGestureRecognizer>(
-                      () => VerticalDragGestureRecognizer()))
-                  ..add(Factory<HorizontalDragGestureRecognizer>(
-                      () => HorizontalDragGestureRecognizer()))
-                  ..add(Factory<EagerGestureRecognizer>(
-                      () => EagerGestureRecognizer()))),
+                        ).show();
+                      },
+                      myLocationEnabled: true,
+                      zoomControlsEnabled: true,
+                      minMaxZoomPreference: MinMaxZoomPreference(3, 8),
+                      mapType: MapType.normal,
+                      initialCameraPosition: initialLocation,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller = controller;
+                      },
+                      compassEnabled: true,
+                      gestureRecognizers: Set()
+                        ..add(Factory<PanGestureRecognizer>(
+                            () => PanGestureRecognizer()))
+                        ..add(Factory<ScaleGestureRecognizer>(
+                            () => ScaleGestureRecognizer()))
+                        ..add(Factory<VerticalDragGestureRecognizer>(
+                            () => VerticalDragGestureRecognizer()))
+                        ..add(Factory<HorizontalDragGestureRecognizer>(
+                            () => HorizontalDragGestureRecognizer()))
+                        ..add(Factory<EagerGestureRecognizer>(
+                            () => EagerGestureRecognizer()))),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
         ),
       ),

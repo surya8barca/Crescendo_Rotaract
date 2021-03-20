@@ -17,6 +17,7 @@ class PlaceHome extends StatefulWidget {
 }
 
 class _HomeState extends State<PlaceHome> {
+  
   int pageindex = 0;
   List pages = [News(), Restaurants(), Places(), Trending()];
   PageController _pageController = PageController(initialPage: 0);
@@ -29,6 +30,7 @@ class _HomeState extends State<PlaceHome> {
         centerTitle: true,
         title: AutoSizeText(
           widget.address,
+          textAlign: TextAlign.center,
           style: TextStyle(color: Colors.black),
           maxLines: 2,
         ),

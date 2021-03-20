@@ -36,6 +36,8 @@ dependencies:
   location:
   geocoder:
   auto_size_text:
+  google_place:
+  here_maps_webservices:
   
 
 dev_dependencies:
