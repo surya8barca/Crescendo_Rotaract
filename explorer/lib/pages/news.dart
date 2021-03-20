@@ -52,7 +52,7 @@ class _HomeState extends State<News> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 28.0,
-                      color: Colors.black,
+                      color: Colors.blue,
                     ),
                   ),
                 ),
@@ -72,14 +72,16 @@ class _HomeState extends State<News> {
                           decoration: BoxDecoration(
                             border: Border.all(
                                 width: MediaQuery.of(context).size.width / 128,
-                                color: Colors.black),
+                                color: Colors.blue),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               AutoSizeText(
                                 news[index]['title'],
-                                maxLines: 2,
+                                maxLines: 3,
+                                minFontSize: 30,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),

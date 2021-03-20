@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:explorer/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here_maps_webservice/here_maps_webservice.dart';
+import 'package:http/http.dart';
 
 class Places extends StatefulWidget {
   final LatLng coordinates;
@@ -13,26 +17,33 @@ class Places extends StatefulWidget {
 class _HomeState extends State<Places> {
   HereMaps heremaps;
   List<dynamic> places = [];
+  List<String> imageurls = [];
   List<dynamic> category = [];
   Future<void> famousplaces(LatLng argument) async {
     try {
       await heremaps
           .explorePopularPlaces(lat: argument.latitude, lon: argument.longitude)
-          .then((value) {
+          .then((value) async {
         setState(() {
           places.addAll(value['results']['items']);
         });
-        for (int i = 0; i < places.length; i++) {
-          if (places[i]['category']['id'] != null &&
-              places[i]['category']['id'] != 'restaurant' &&
-              !(category.contains(places[i]['category']['id']))) {
-            category.add(places[i]['category']['id']);
+        await Future.forEach(places, (item) async {
+          //https://serpapi.com/playground?q=pool&ijn=0&tbm=isch
+          /*final response = await get(
+              'https://serpapi.com/playground?q=${item['title']}&ijn=0&tbm=isch');
+          var data = jsonDecode(response.body);
+          print("*");
+          print(data);*/
+          if (item['category']['id'] != null &&
+              item['category']['id'] != 'restaurant' &&
+              !(category.contains(item['category']['id']))) {
+            category.add(item['category']['id']);
           }
-          if (places[i]['category']['id'] == null ||
-              places[i]['category']['id'] == 'restaurant') {
-            places.remove(places[i]);
+          if (item['category']['id'] == null ||
+              item['category']['id'] == 'restaurant') {
+            places.remove(item);
           }
-        }
+        });
         print(category);
         print(places);
       });
@@ -81,8 +92,47 @@ class _HomeState extends State<Places> {
                   shrinkWrap: true,
                   itemCount: places.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(places[index]['title']),
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width:
+                                      MediaQuery.of(context).size.width / 128,
+                                  color: Colors.black),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                AutoSizeText(
+                                  places[index]['title'],
+                                  maxLines: 2,
+                                  minFontSize: 30,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                /*SizedBox(
+                                    height: 200,
+                                    width: 200,
+                                    child: Image(
+                                        image: NetworkImage(
+                                            news[index]['urlToImage']))),*/
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

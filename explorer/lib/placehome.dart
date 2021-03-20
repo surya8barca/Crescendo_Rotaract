@@ -42,7 +42,7 @@ class _HomeState extends State<PlaceHome> {
             pageindex = newIndex;
           });
         },
-        children: [News(), Places(coordinates: widget.coordinates,), Restaurants(coordinates: widget.coordinates,), Trending(address: widget.address,)],
+        children: [News(), Places(coordinates: widget.coordinates,), Restaurants(coordinates: widget.coordinates,), Trending()],
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: pageindex,

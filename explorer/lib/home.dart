@@ -26,32 +26,68 @@ class _HomeState extends State<Home> {
       SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: ButtonTheme(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(
-                                MediaQuery.of(context).size.width / 10.666)),
-                        minWidth: MediaQuery.of(context).size.width / 2.1333,
-                        height: MediaQuery.of(context).size.height / 8,
-                        buttonColor: Colors.cyan,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Explore(),
-                                ));
-                          },
-                          child: Text(
-                            'Start exploring',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize:
-                                  MediaQuery.of(context).size.height / 21.333,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 10,),
+              Center(
+                child: ButtonTheme(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(
+                                    MediaQuery.of(context).size.width / 10.666)),
+                            minWidth: MediaQuery.of(context).size.width / 2.1333,
+                            height: MediaQuery.of(context).size.height / 8,
+                            buttonColor: Colors.cyan,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Explore(),
+                                    ));
+                              },
+                              child: Text(
+                                'Start exploring',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize:
+                                      MediaQuery.of(context).size.height / 21.333,
+                                ),
+                              ),
+                            ),
+                          ),
+              ),
+                        SizedBox(height: 10,),
+                        Center(
+                          child: ButtonTheme(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(
+                                    MediaQuery.of(context).size.width / 10.666)),
+                            minWidth: MediaQuery.of(context).size.width / 2.1333,
+                            height: MediaQuery.of(context).size.height / 8,
+                            buttonColor: Colors.cyan,
+                            child: ElevatedButton(
+                              onPressed: () {/*
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Explore(),
+                                    ));*/
+                              },
+                              child: Text(
+                                'Around me',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize:
+                                      MediaQuery.of(context).size.height / 21.333,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+
+
+            ],
           ),
         ),
       ),
