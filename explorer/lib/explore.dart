@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Explore extends StatefulWidget {
@@ -13,7 +12,7 @@ class Explore extends StatefulWidget {
 }
 
 class _HomeState extends State<Explore> {
-  GooglePlace gplace;
+  
   static final CameraPosition initialLocation = CameraPosition(
     target: LatLng(20.5937, 78.9629),
     zoom: 4,
@@ -32,32 +31,9 @@ class _HomeState extends State<Explore> {
     }
   }
 
-  Future<String> getplaceId(LatLng coordinates) async {
-    try {
-      var result = await gplace.search.getNearBySearch(
-          Location(lat: coordinates.latitude, lng: coordinates.longitude),
-          1500);
-      print(result.status);
-      return "hey";
-    } catch (e) {
-      print(e.toString());
-      return "Error";
-    }
-  }
+  
 
-  /*Future<void> getdetails(String address) async {
-    try {
-      var result = await gplace.details.get(placeId)
-    } catch (e) {
-      print(e.message);
-    }
-  }*/
-
-  @override
-  void initState() {
-    gplace = GooglePlace("AIzaSyA-Uz5RbrcKJz1c31VAIRc-fdIOvDUk3pA");
-    super.initState();
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +78,6 @@ class _HomeState extends State<Explore> {
                   child: GoogleMap(
                       onLongPress: (argument) async {
                         final address = await getaddress(argument);
-                        final placeId = await getplaceId(argument);
-                        print(placeId);
                         Alert(
                           context: context,
                           title: address,
@@ -130,7 +104,7 @@ class _HomeState extends State<Explore> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PlaceHome(
-                                            address: address,
+                                            address: address,coordinates: argument,
                                           ),
                                         ));
                                   },

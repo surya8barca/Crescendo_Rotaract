@@ -6,20 +6,20 @@ import 'package:explorer/pages/news.dart';
 import 'package:explorer/pages/places.dart';
 import 'package:explorer/pages/restaurants.dart';
 import 'package:explorer/pages/trends.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceHome extends StatefulWidget {
   final String address;
+  final LatLng coordinates;
 
-  PlaceHome({this.address});
+  PlaceHome({this.address,this.coordinates});
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<PlaceHome> {
-  
   int pageindex = 0;
-  List pages = [News(), Restaurants(), Places(), Trending()];
   PageController _pageController = PageController(initialPage: 0);
 
   @override
@@ -42,7 +42,7 @@ class _HomeState extends State<PlaceHome> {
             pageindex = newIndex;
           });
         },
-        children: [News(), Places(), Restaurants(), Trending()],
+        children: [News(), Places(coordinates: widget.coordinates,), Restaurants(coordinates: widget.coordinates,), Trending(address: widget.address,)],
       ),
       bottomNavigationBar: CurvedNavigationBar(
         index: pageindex,
