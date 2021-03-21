@@ -37,6 +37,7 @@ dependencies:
   geocoder:
   auto_size_text:
   here_maps_webservice:
+  flutter_rating_bar:
   
 
 dev_dependencies:
