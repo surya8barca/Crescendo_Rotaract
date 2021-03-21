@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:explorer/Placehome.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:here_maps_webservice/here_maps_webservice.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Explore extends StatefulWidget {
@@ -12,7 +14,6 @@ class Explore extends StatefulWidget {
 }
 
 class _HomeState extends State<Explore> {
-  
   static final CameraPosition initialLocation = CameraPosition(
     target: LatLng(20.5937, 78.9629),
     zoom: 4,
@@ -31,21 +32,28 @@ class _HomeState extends State<Explore> {
     }
   }
 
-  
+  TextEditingController txt2 = new TextEditingController();
+  HereMaps heremaps;
+  List autocomplete = [];
 
- 
+
+  @override
+  void initState() {
+    heremaps = HereMaps(apiKey: "eb1nV17vXjOOaOd9HZsWFlde5SET0ncga8O-cg-AazI");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
         centerTitle: true,
         title: Text(
           'Explore',
           style: TextStyle(
             fontSize: MediaQuery.of(context).size.height / 25,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),
@@ -61,7 +69,8 @@ class _HomeState extends State<Explore> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.height / 25,
-                    color: Colors.black,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
@@ -82,7 +91,7 @@ class _HomeState extends State<Explore> {
                           context: context,
                           title: address,
                           buttons: [],
-                          style: AlertStyle(isCloseButton: false),
+                          style: AlertStyle(isCloseButton: false,backgroundColor: Colors.transparent,titleStyle: TextStyle(color: Colors.white)),
                           content: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -91,12 +100,10 @@ class _HomeState extends State<Explore> {
                               ),
                               ButtonTheme(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: new BorderRadius.circular(
-                                        MediaQuery.of(context).size.width /
-                                            10.666)),
+                                    borderRadius: new BorderRadius.circular(25)),
                                 minWidth:
-                                    MediaQuery.of(context).size.width / 2.1333,
-                                height: MediaQuery.of(context).size.height / 8,
+                                    MediaQuery.of(context).size.width / 2,
+                                height: MediaQuery.of(context).size.height / 4,
                                 buttonColor: Colors.cyan,
                                 child: ElevatedButton(
                                   onPressed: () {
@@ -104,7 +111,8 @@ class _HomeState extends State<Explore> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => PlaceHome(
-                                            address: address,coordinates: argument,
+                                            address: address,
+                                            coordinates: argument,
                                           ),
                                         ));
                                   },

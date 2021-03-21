@@ -65,7 +65,8 @@ class _HomeState extends State<Places> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 28.0,
-                      color: Colors.black,
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
@@ -85,6 +86,7 @@ class _HomeState extends State<Places> {
                           Container(
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
+                              color: Colors.cyanAccent,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   width:
@@ -110,13 +112,11 @@ class _HomeState extends State<Places> {
                                 ),
                                 ButtonTheme(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: new BorderRadius.circular(
-                                          MediaQuery.of(context).size.width /
-                                              10.666)),
+                                      borderRadius: new BorderRadius.circular(25)),
                                   minWidth: MediaQuery.of(context).size.width /
-                                      2.1333,
+                                      1.5,
                                   height:
-                                      MediaQuery.of(context).size.height / 8,
+                                      MediaQuery.of(context).size.height / 6,
                                   buttonColor: Colors.cyan,
                                   child: ElevatedButton(
                                     onPressed: () {
@@ -152,7 +152,7 @@ class _HomeState extends State<Places> {
                                           itemCount: 5,
                                             itemBuilder: (context, _) => Icon(
                                                   Icons.star,
-                                                  color: Colors.blue,
+                                                  color: Colors.black,
                                                 ),
                                             onRatingUpdate: (rating) {
                                               setState(() {

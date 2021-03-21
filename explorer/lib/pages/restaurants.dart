@@ -67,7 +67,8 @@ class _HomeState extends State<Restaurants> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 28.0,
-                      color: Colors.black,
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
@@ -87,6 +88,7 @@ class _HomeState extends State<Restaurants> {
                           Container(
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
+                              color: Colors.cyanAccent,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   width:
@@ -153,7 +155,7 @@ class _HomeState extends State<Restaurants> {
                                           itemCount: 5,
                                             itemBuilder: (context, _) => Icon(
                                                   Icons.star,
-                                                  color: Colors.blue,
+                                                  color: Colors.black,
                                                 ),
                                             onRatingUpdate: (rating) {
                                               setState(() {

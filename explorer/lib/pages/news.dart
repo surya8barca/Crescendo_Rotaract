@@ -51,7 +51,8 @@ class _HomeState extends State<News> {
                     'Latest News',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 28.0,
+                      fontSize: 30,
+                      decoration: TextDecoration.underline,
                       color: Colors.blue,
                     ),
                   ),
@@ -64,44 +65,49 @@ class _HomeState extends State<News> {
                   shrinkWrap: true,
                   itemCount: news.length,
                   itemBuilder: (context, index) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                width: MediaQuery.of(context).size.width / 128,
-                                color: Colors.blue),
+                    return Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.cyanAccent,
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                  width: MediaQuery.of(context).size.width / 128,
+                                  color: Colors.blue),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                AutoSizeText(
+                                  news[index]['title'],
+                                  maxLines: 3,
+                                  minFontSize: 30,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                SizedBox(
+                                    height: 250,
+                                    width: 250,
+                                    child: Image(
+                                        image: NetworkImage(
+                                            news[index]['urlToImage']))),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                news[index]['title'],
-                                maxLines: 3,
-                                minFontSize: 30,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              SizedBox(
-                                  height: 200,
-                                  width: 200,
-                                  child: Image(
-                                      image: NetworkImage(
-                                          news[index]['urlToImage']))),
-                            ],
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   },
                 ),
