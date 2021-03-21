@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:explorer/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here_maps_webservice/here_maps_webservice.dart';
 
@@ -39,6 +40,7 @@ class _HomeState extends State<Restaurants> {
   }
 
   LatLng coordinates;
+  bool visible = false;
 
   @override
   void initState() {
@@ -85,29 +87,82 @@ class _HomeState extends State<Restaurants> {
                           Container(
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  width: MediaQuery.of(context).size.width / 128,
-                                  color: Colors.black),
+                                  width:
+                                      MediaQuery.of(context).size.width / 128,
+                                  color: Colors.blue),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    AutoSizeText(
-                                      restaurants[index]['title'],
-                                      maxLines: 2,
-                                      minFontSize: 30,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black),
+                                    Center(
+                                      child: AutoSizeText(
+                                        restaurants[index]['title'],
+                                        maxLines: 3,
+                                        minFontSize: 25,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
                                   height: 2,
+                                ),
+                                ButtonTheme(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(
+                            MediaQuery.of(context).size.width / 10.666)),
+                    minWidth: MediaQuery.of(context).size.width / 2.1333,
+                    height: MediaQuery.of(context).size.height / 8,
+                    buttonColor: Colors.cyan,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                                        visible = true;
+                                      });
+                      },
+                      child: Text(
+                        'Rate this Place',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: MediaQuery.of(context).size.height / 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                                  height: 10,
+                                ),
+                                Visibility(
+                                  visible: visible,
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        RatingBar.builder(
+                                          itemCount: 5,
+                                            itemBuilder: (context, _) => Icon(
+                                                  Icons.star,
+                                                  color: Colors.blue,
+                                                ),
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                rating = rating;
+                                              });
+                                            }),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                  /*SizedBox(
                                     height: 200,

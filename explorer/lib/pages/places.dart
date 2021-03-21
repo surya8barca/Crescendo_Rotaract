@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:explorer/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here_maps_webservice/here_maps_webservice.dart';
-import 'package:http/http.dart';
 
 class Places extends StatefulWidget {
   final LatLng coordinates;
@@ -17,8 +15,6 @@ class Places extends StatefulWidget {
 class _HomeState extends State<Places> {
   HereMaps heremaps;
   List<dynamic> places = [];
-  List<String> imageurls = [];
-  List<dynamic> category = [];
   Future<void> famousplaces(LatLng argument) async {
     try {
       await heremaps
@@ -28,23 +24,11 @@ class _HomeState extends State<Places> {
           places.addAll(value['results']['items']);
         });
         await Future.forEach(places, (item) async {
-          //https://serpapi.com/playground?q=pool&ijn=0&tbm=isch
-          /*final response = await get(
-              'https://serpapi.com/playground?q=${item['title']}&ijn=0&tbm=isch');
-          var data = jsonDecode(response.body);
-          print("*");
-          print(data);*/
-          if (item['category']['id'] != null &&
-              item['category']['id'] != 'restaurant' &&
-              !(category.contains(item['category']['id']))) {
-            category.add(item['category']['id']);
-          }
           if (item['category']['id'] == null ||
               item['category']['id'] == 'restaurant') {
             places.remove(item);
           }
         });
-        print(category);
         print(places);
       });
     } catch (e) {
@@ -53,8 +37,9 @@ class _HomeState extends State<Places> {
     }
   }
 
+  bool visible = false;
   LatLng coordinates;
-
+  int rating;
   @override
   void initState() {
     coordinates = widget.coordinates;
@@ -100,24 +85,83 @@ class _HomeState extends State<Places> {
                           Container(
                             padding: EdgeInsets.all(2),
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   width:
                                       MediaQuery.of(context).size.width / 128,
-                                  color: Colors.black),
+                                  color: Colors.blue),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                AutoSizeText(
-                                  places[index]['title'],
-                                  maxLines: 2,
-                                  minFontSize: 30,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black),
+                                Center(
+                                  child: AutoSizeText(
+                                    places[index]['title'],
+                                    maxLines: 3,
+                                    minFontSize: 25,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 2,
+                                ),
+                                ButtonTheme(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: new BorderRadius.circular(
+                                          MediaQuery.of(context).size.width /
+                                              10.666)),
+                                  minWidth: MediaQuery.of(context).size.width /
+                                      2.1333,
+                                  height:
+                                      MediaQuery.of(context).size.height / 8,
+                                  buttonColor: Colors.cyan,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        visible = true;
+                                      });
+                                    },
+                                    child: Text(
+                                      'Rate this Place',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height /
+                                                28,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Visibility(
+                                  visible: visible,
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        RatingBar.builder(
+                                          itemCount: 5,
+                                            itemBuilder: (context, _) => Icon(
+                                                  Icons.star,
+                                                  color: Colors.blue,
+                                                ),
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                rating = rating;
+                                              });
+                                            }),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 /*SizedBox(
                                     height: 200,
